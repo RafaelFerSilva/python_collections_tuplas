@@ -2,10 +2,12 @@ import array as arr
 import numpy as np
 from abc import ABCMeta, abstractmethod
 from operator import attrgetter
+from functools import total_ordering
 
 
 def extrai_saldo(conta):
     return conta._saldo
+
 
 class Conta(metaclass=ABCMeta):
     def __init__(self, codigo):
@@ -34,6 +36,7 @@ class ContaPoupanca(Conta):
         self._saldo -= 3
 
 
+@total_ordering
 class ContaSalario:
 
     def __init__(self, codigo):
@@ -47,7 +50,9 @@ class ContaSalario:
         return self._codigo == outro._codigo and self._saldo == outro._saldo
 
     def __lt__(self, other):
-        return self._saldo < other._saldo
+        if self._saldo != other._saldo:
+            return self._saldo < other._saldo
+        return self._codigo < other._codigo
 
     def deposita(self, valor):
         self._saldo += valor
@@ -98,36 +103,36 @@ usuarios = [
 #     print(nome)
 
 # ordenar
-print(sorted(idades))
+# print(sorted(idades))
 
 # retornar ao inverso
-print(list(reversed(idades)))
+# print(list(reversed(idades)))
 
 # ordenar do maior para o menor
-print(sorted(idades, reverse=True))
+# print(sorted(idades, reverse=True))
 
 # inverter e ordenar
-print(list(reversed(sorted(idades))))
-
-print(idades)
+# print(list(reversed(sorted(idades))))
+#
+# print(idades)
 
 # Ordena a lista
-idades.sort()
+# idades.sort()
+#
+# print(idades)
+#
+# nomes = ['Guilherme', 'Daniela', 'Paulo']
+#
+# print(sorted(nomes))
 
-print(idades)
-
-nomes = ['Guilherme', 'Daniela', 'Paulo']
-
-print(sorted(nomes))
-
-conta_do_guilherme = ContaSalario(17)
+conta_do_guilherme = ContaSalario(1700)
 conta_do_guilherme.deposita(500)
 
 conta_do_daniela = ContaSalario(3)
 conta_do_daniela.deposita(1000)
 
 conta_do_paulo = ContaSalario(133)
-conta_do_paulo.deposita(510)
+conta_do_paulo.deposita(500)
 
 contas = [conta_do_guilherme, conta_do_daniela, conta_do_paulo]
 
@@ -140,13 +145,21 @@ contas = [conta_do_guilherme, conta_do_daniela, conta_do_paulo]
 # for conta in sorted(contas, key=attrgetter("_saldo")):
 #     print(conta)
 
-print(conta_do_guilherme > conta_do_daniela)
+# print(conta_do_guilherme > conta_do_daniela)
+#
+# for conta in sorted(contas):
+#     print(conta)
+
+# attrgetter pode utilizar mais de um atributo para comparar os itens
+# for conta in sorted(contas, key=attrgetter("_saldo", "_codigo")):
+#     print(conta)
+
 
 for conta in sorted(contas):
     print(conta)
 
 
-for conta in sorted(contas, reverse=True):
-    print(conta)
-
-
+print(conta_do_guilherme <= conta_do_daniela)
+print(conta_do_guilherme > conta_do_paulo)
+print(conta_do_guilherme < conta_do_guilherme)
+print(conta_do_guilherme == conta_do_guilherme)
